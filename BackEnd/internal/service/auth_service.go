@@ -1,0 +1,43 @@
+package service
+
+import (
+	"WebAbsensiMuliaBuana/BackEnd/internal/model"
+	"WebAbsensiMuliaBuana/BackEnd/internal/repository"
+
+	"golang.org/x/crypto/bcrypt"
+)
+
+type AuthService struct {
+	repo repository.UserRepository
+}
+
+func NewAuthService(r repository.UserRepository) *AuthService {
+	return &AuthService{r}
+}
+
+func (s *AuthService) Register(name, email, password, role string) error {
+	hash, _ := bcrypt.GenerateFromPassword([]byte(password), 10)
+
+	user := model.User{
+		Name:     name,
+		Email:    email,
+		Password: string(hash),
+		Role:     role,
+	}
+
+	return s.repo.Create(&user)
+}
+
+func (s *AuthService) Login(email, password string) (*model.User, error) {
+	user, err := s.repo.FindByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
