@@ -2,6 +2,7 @@ package handler
 
 import (
 	"WebAbsensiMuliaBuana/BackEnd/internal/service"
+	"WebAbsensiMuliaBuana/BackEnd/pkg/jwt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -49,5 +50,10 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 		return c.Status(401).JSON("login failed")
 	}
 
-	return c.JSON(user)
+	token, _ := jwt.GenerateToken(user.ID, user.Role)
+
+	return c.JSON(fiber.Map{
+		"token": token,
+		"user":  user,
+	})
 }
