@@ -13,6 +13,9 @@ func SetupRoutes(
 	jurusanHandler *handler.JurusanHandler,
 	kelasHandler *handler.KelasHandler,
 	siswaKelasHandler *handler.SiswaKelasHandler,
+	guruMapelKelasHandler *handler.GuruMapelKelasHandler,
+	mapelHandler *handler.MapelHandler,
+	absensiGuruHandler *handler.AbsensiGuruHandler,
 ) {
 
 	// ========================
@@ -22,7 +25,7 @@ func SetupRoutes(
 	app.Post("/login", auth.Login)
 
 	// ========================
-	// PROTECTED (LOGIN WAJIB)
+	// PROTECTED
 	// ========================
 	api := app.Group("/api", middleware.AuthMiddleware())
 
@@ -35,6 +38,8 @@ func SetupRoutes(
 		return c.JSON("hello guru")
 	})
 
+	guru.Get("/mapel-kelas", guruMapelKelasHandler.GetMy)
+
 	// ========================
 	// ROLE: ADMIN
 	// ========================
@@ -44,12 +49,21 @@ func SetupRoutes(
 		return c.JSON("hello admin")
 	})
 
-	// 🔥 CRUD ADMIN
+	// CRUD ADMIN
 	admin.Post("/jurusan", jurusanHandler.Create)
 	admin.Get("/jurusan", jurusanHandler.GetAll)
 
 	admin.Post("/kelas", kelasHandler.Create)
 	admin.Get("/kelas", kelasHandler.GetAll)
 
+	admin.Post("/mapel", mapelHandler.Create)
+	admin.Get("/mapel", mapelHandler.GetAll)
+
 	admin.Post("/assign-siswa", siswaKelasHandler.Assign)
+
+	admin.Post("/assign-guru", guruMapelKelasHandler.Assign) // ✅ tambah
+
+	guru.Get("/mapel-kelas", guruMapelKelasHandler.GetMy)
+
+	guru.Post("/absen", absensiGuruHandler.Absen)
 }

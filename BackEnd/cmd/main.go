@@ -50,11 +50,32 @@ func main() {
 	kelasHandler := handler.NewKelasHandler(kelasService)
 
 	// =========================
+	// MATA PELAJARAN
+	// =========================
+	mapelRepo := repository.NewMapelRepo(db)
+	mapelService := service.NewMapelService(mapelRepo)
+	mapelHandler := handler.NewMapelHandler(mapelService)
+
+	// =========================
 	// SISWA KELAS
 	// =========================
 	siswaKelasRepo := repository.NewSiswaKelasRepo(db)
 	siswaKelasService := service.NewSiswaKelasService(siswaKelasRepo)
 	siswaKelasHandler := handler.NewSiswaKelasHandler(siswaKelasService)
+
+	// =========================
+	// GURU MAPEL KELAS
+	// =========================
+	guruMapelKelasRepo := repository.NewGuruMapelKelasRepo(db)
+	guruMapelKelasService := service.NewGuruMapelKelasService(guruMapelKelasRepo)
+	guruMapelKelasHandler := handler.NewGuruMapelKelasHandler(guruMapelKelasService)
+
+	// =========================
+	// ABSENSI GURU
+	// =========================
+	absensiGuruRepo := repository.NewAbsensiGuruRepo(db)
+	absensiGuruService := service.NewAbsensiGuruService(absensiGuruRepo)
+	absensiGuruHandler := handler.NewAbsensiGuruHandler(absensiGuruService)
 
 	// =========================
 	// ROUTES
@@ -65,6 +86,9 @@ func main() {
 		jurusanHandler,
 		kelasHandler,
 		siswaKelasHandler,
+		guruMapelKelasHandler,
+		mapelHandler,
+		absensiGuruHandler,
 	)
 
 	app.Listen(":3000")
