@@ -16,6 +16,8 @@ func SetupRoutes(
 	guruMapelKelasHandler *handler.GuruMapelKelasHandler,
 	mapelHandler *handler.MapelHandler,
 	absensiGuruHandler *handler.AbsensiGuruHandler,
+	invitationHandler *handler.InvitationHandler,
+	absensiHandler *handler.AbsensiHandler,
 ) {
 
 	// ========================
@@ -66,4 +68,18 @@ func SetupRoutes(
 	guru.Get("/mapel-kelas", guruMapelKelasHandler.GetMy)
 
 	guru.Post("/absen", absensiGuruHandler.Absen)
+
+	// ADMIN ONLY
+	admin.Post("/invite-guru", invitationHandler.Invite)
+
+	// PUBLIC
+	app.Get("/invite/validate", invitationHandler.Validate)
+	app.Post("/invite/register", invitationHandler.Register)
+
+	// GURU
+	guru.Post("/create-session", absensiHandler.CreateSession)
+
+	// MURID
+	murid := api.Group("/murid", middleware.RoleMiddleware("murid"))
+	murid.Post("/absen", absensiHandler.Absen)
 }

@@ -77,6 +77,14 @@ func main() {
 	absensiGuruService := service.NewAbsensiGuruService(absensiGuruRepo)
 	absensiGuruHandler := handler.NewAbsensiGuruHandler(absensiGuruService)
 
+	invRepo := repository.NewInvitationRepo(db)
+	invService := service.NewInvitationService(invRepo, userRepo)
+	invHandler := handler.NewInvitationHandler(invService)
+
+	absensiRepo := repository.NewAbsensiRepo(db)
+	absensiService := service.NewAbsensiService(absensiRepo)
+	absensiHandler := handler.NewAbsensiHandler(absensiService)
+
 	// =========================
 	// ROUTES
 	// =========================
@@ -89,6 +97,8 @@ func main() {
 		guruMapelKelasHandler,
 		mapelHandler,
 		absensiGuruHandler,
+		invHandler,
+		absensiHandler,
 	)
 
 	app.Listen(":3000")
