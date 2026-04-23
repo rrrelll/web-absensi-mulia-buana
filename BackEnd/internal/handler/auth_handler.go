@@ -17,10 +17,10 @@ func NewAuthHandler(s *service.AuthService) *AuthHandler {
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	type req struct {
-		Name     string
-		Email    string
-		Password string
-		Role     string
+		Name     string `json:"name"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		Role     string `json:"role"`
 	}
 
 	var body req

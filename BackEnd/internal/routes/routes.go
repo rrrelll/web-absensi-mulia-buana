@@ -78,8 +78,12 @@ func SetupRoutes(
 
 	// GURU
 	guru.Post("/create-session", absensiHandler.CreateSession)
+	guru.Post("/session/:id/generate-alpa", absensiHandler.GenerateAlpa)
+	guru.Get("/session/:id/laporan", absensiHandler.GetLaporan)
+	guru.Patch("/absensi/:id", absensiHandler.UpdateStatus)
+	guru.Get("/session/:id/summary", absensiHandler.GetSummary)
 
 	// MURID
-	murid := api.Group("/murid", middleware.RoleMiddleware("murid"))
-	murid.Post("/absen", absensiHandler.Absen)
+	siswa := api.Group("/siswa", middleware.RoleMiddleware("siswa"))
+	siswa.Post("/absen", absensiHandler.Absen)
 }
